@@ -1,4 +1,4 @@
-using ExamFive
+using Reserving
 using Test
 
 # Using this variable to make Triangles look more readable
@@ -40,7 +40,7 @@ excel_LDFs = [1.076353 1.096689 1.014968 1.163210 1.396060 1.325042 1.307763 1.2
 excel_CDFs = [4.488720, 4.275621, 3.840673, 3.500925, 3.134936, 2.210627,
               1.742066, 1.288798, 1.086343, 1.000000][end:-1:1]
 
-@testset "ExamFive.jl" begin
+@testset "Reserving.jl" begin
     @test get_latest_diagonal(test_triangle) == excel_latest_diagonal
     @test get_chainladder_ultimates(test_triangle) ≈ excel_chainladder_results rtol=1e-6
     
