@@ -23,7 +23,7 @@ excel_chainladder_results = [23584.374, 32096.387, 27934.462, 62039.612,
         51145.223, 45168.086, 67234.917, 32689.289, 39826.728, 37766.747]
 
 # So this includes a row of ms at the bottom so that the dimensions match
-# the get_LDFs() function output (I may alter it later to preserve dimensions from original triangle)
+# the LDFs() function output (I may alter it later to preserve dimensions from original triangle)
 excel_LDFs = [1.076353 1.096689 1.014968 1.163210 1.396060 1.325042 1.307763 1.202595 1.086343
               1.100128 1.092541 1.025249 1.218616 1.305264 1.368843 1.365154 1.170133	m
               1.048289 1.125022 1.097092 1.080145 1.493708 1.183633 1.382177 m m
@@ -41,18 +41,18 @@ excel_CDFs = [4.488720, 4.275621, 3.840673, 3.500925, 3.134936, 2.210627,
               1.742066, 1.288798, 1.086343, 1.000000][end:-1:1]
 
 @testset "Reserving.jl" begin
-    @test get_latest_diagonal(test_triangle) == excel_latest_diagonal
-    @test get_chainladder_ultimates(test_triangle) ≈ excel_chainladder_results rtol=1e-6
+    @test latest_diagonal(test_triangle) == excel_latest_diagonal
+    @test chainladder_ultimates(test_triangle) ≈ excel_chainladder_results rtol=1e-6
     
-    # testing the get_LDFs() function
+    # testing the LDFs() function
     # the lambda function is necessary because missing == missing results in missing, not true
     # this is too messy -- later, refactor the lambda function as
     # replace_missings_with_zeros() or something
-    @test (x -> ismissing(x) ? 0. : x).(get_LDFs(test_triangle).data) ≈
+    @test (x -> ismissing(x) ? 0. : x).(LDFs(test_triangle).data) ≈
           (x -> ismissing(x) ? 0. : x).(excel_LDFs) rtol = 1e-6
 
-    @test get_CDFs(test_triangle) ≈ excel_CDFs rtol = 1e-6
+    @test CDFs(test_triangle) ≈ excel_CDFs rtol = 1e-6
 
-    # later do @test get_YOYs but it's not important right now
+    # later do @test YOYs but it's not important right now
 
 end
