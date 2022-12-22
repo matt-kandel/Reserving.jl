@@ -6,7 +6,7 @@ struct Triangle
 end
 
 # Functions
-function get_latest_diagonal(triangle::Triangle)
+function latest_diagonal(triangle::Triangle)
     
     function find_latest_loss(row::SubArray{Union{Number, Missing}})
         # go from right to left and stop when you find a non-missing loss
@@ -30,21 +30,21 @@ function get_latest_diagonal(triangle::Triangle)
     return [find_latest_loss(row) for row in eachrow(triangle.data)]
 end
 
-function get_LDFs(triangle::Triangle)
+function LDFs(triangle::Triangle)
     # Returns a Triangle of Loss Development Factors
     # with one less column than original data
     ldfs = triangle.data[:, 2:end] ./ triangle.data[:, 1:end-1]
     return Triangle(ldfs)
 end
 
-function get_YOYs(triangle::Triangle)
+function YOYs(triangle::Triangle)
     # Returns a Triangle of Year-on-Year Changes 
     # with one less row than original data 
     yoys = triangle.data[2:end, :] ./ triangle.data[1:end-1, :]
     return Triangle(yoys)
 end
 
-function get_column_averages(data)
+function column_averages(data)
     # Returns a vector of average ldfs by taking averages across columns
 
     col_sum(col) = sum(x for x in col if !ismissing(x))
@@ -53,15 +53,15 @@ function get_column_averages(data)
 end
 
 # Convenience function for Triangle objects
-get_column_averages(triangle::Triangle) = get_column_averages(triangle.data)
+column_averages(triangle::Triangle) = column_averages(triangle.data)
 
-function get_CDFs(triangle::Triangle, tail_factor::Number=1.0)
+function CDFs(triangle::Triangle, tail_factor::Number=1.0)
 
     # start with LDFs
-    ldfs = get_LDFs(triangle)
+    ldfs = LDFs(triangle)
     
     # then take average LDF for all columns
-    average_ldfs = get_column_averages(ldfs)
+    average_ldfs = column_averages(ldfs)
     
     # add the tail factor as the last entry to average_ldfs vector
     push!(average_ldfs, tail_factor)
@@ -72,28 +72,28 @@ function get_CDFs(triangle::Triangle, tail_factor::Number=1.0)
 end
 
 # When you just put in losses, calculate everything from scratch
-function get_chainladder_ultimates(triangle::Triangle, tail_factor::Number=1.0)
-    cdfs  = get_CDFs(triangle, tail_factor)
-    latest_diagonal = get_latest_diagonal(triangle)
+function chainladder_ultimates(triangle::Triangle, tail_factor::Number=1.0)
+    cdfs  = CDFs(triangle, tail_factor)
+    latest_diagonal = latest_diagonal(triangle)
     return latest_diagonal .* cdfs
 end
 
-function get_born_ferg_ultimates(triangle::Triangle,
+function born_ferg_ultimates(triangle::Triangle,
                                  premiums::Vector{Number},
                                  expected_claims_ratio::Number,
                                  tail_factor::Number=1.0)
-    cdfs  = get_CDFs(triangle, tail_factor)
-    latest_diagonal = get_latest_diagonal(triangle)
+    cdfs  = CDFs(triangle, tail_factor)
+    latest_diagonal = latest_diagonal(triangle)
     return latest_diagonal + premiums .* expected_claims_ratio .* (1 .- 1 ./ cdfs)
 end
 
-function get_cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{Number})
-    cdfs = get_CDFs(triangle)
-    latest_diagonal = get_latest_diagonal(triangle)
+function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{Number})
+    cdfs = CDFs(triangle)
+    latest_diagonal = latest_diagonal(triangle)
     used_up_premium = on_level_earned_premiums ./ cdfs
     expected_claims_ratio = sum(latest_diagonal) / sum(used_up_premium)
     
-    return get_born_ferg_ultimates(triangle, on_level_earned_premiums, expected_claims_ratio)
+    return born_ferg_ultimates(triangle, on_level_earned_premiums, expected_claims_ratio)
 end
 
 function make_lower_right_missing(matrix)
@@ -135,7 +135,7 @@ function berquist_sherman_adjust_disposal(counts::Triangle,
 
     # get latest diagonal of disposal rates
     # it's also backwards from how I usually calculate it, so also need to reverse it
-    disposal_diagonal = (get_latest_diagonal(counts) ./ ultimates)[end:-1:1]
+    disposal_diagonal = (latest_diagonal(counts) ./ ultimates)[end:-1:1]
 
     counts = make_lower_right_missing(counts)
 
@@ -168,7 +168,7 @@ function berquist_sherman_case(case::Matrix{Union{Number, Missing}}, severity_tr
         error("must be square!")
     end
 
-    latest_diagonal = get_latest_diagonal(case)
+    latest_diagonal = latest_diagonal(case)
     severity_trends = [(1 + severity_trend) ^ (height + 1 - (x + y)) for x ∈ 1:height, y ∈ 1:height]
     adjusted_case = latest_diagonal .* severity_trends
     return make_lower_right_missing(adjusted_case)
