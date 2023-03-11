@@ -53,7 +53,7 @@ function chainladder_ultimates(triangle::Triangle, tail_factor::Number=1.0)
 end
 
 function born_ferg_ultimates(triangle::Triangle,
-                                 premiums::Vector{Number},
+                                 premiums::Vector{Float64},
                                  expected_claims_ratio::Number,
                                  tail_factor::Number=1.0)
     cdfs  = CDFs(triangle, tail_factor)
@@ -61,7 +61,7 @@ function born_ferg_ultimates(triangle::Triangle,
     return diagonal + premiums .* expected_claims_ratio .* (1 .- 1 ./ cdfs)
 end
 
-function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{Number})
+function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{Float64})
     cdfs = CDFs(triangle)
     diagonal = latest_diagonal(triangle)
     used_up_premium = on_level_earned_premiums ./ cdfs
@@ -105,7 +105,7 @@ function make_heatmap(triangle::Triangle)
 end
 
 function berquist_sherman_adjust_disposal(counts::Triangle, 
-                                          ultimates::Vector{Number})
+                                          ultimates::Vector{Float64})
 
     # the disposal diagonal needs to be in reverse order
     disposal_diagonal = (latest_diagonal(counts) ./ ultimates)[end:-1:1]
@@ -118,7 +118,7 @@ end
 
 function berquist_sherman_adjust_paid(counts::Triangle,
                                       paid::Triangle,
-                                      ultimates::Vector{Number})
+                                      ultimates::Vector{Float64})
 
     adjusted_counts = berquist_sherman_adjust_disposal(counts, ultimates)
 

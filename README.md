@@ -23,5 +23,5 @@ equivalent of a more traditional actuarial workflow. The tests used so far rely 
 
 ### To do later
 * functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
-* write tests for Born-Ferg, Cape Cod, and Berquist-Sherman functions
+* write tests for Berquist-Sherman functions
 * functions for claim emergence
