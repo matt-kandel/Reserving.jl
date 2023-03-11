@@ -25,4 +25,4 @@ equivalent of a more traditional actuarial workflow. The tests used so far rely 
 * functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
 * write tests for Berquist-Sherman functions
 * functions for claim emergence
-* figure out testing/continuous 
+* figure out testing/continuous integration stuff (tests are currently passing as of March 11, 2023)
