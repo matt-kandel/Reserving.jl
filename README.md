@@ -1,6 +1,6 @@
 # Reserving.jl
 
-[![Build Status](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+[![Build Status](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 This is a library to do basic actuarial reserving based on the Casualty Actuarial Society (CAS) Exam 5
 material. I wanted to write code could scale beyond the 4x4 or 5x5 toy examples that are designed to
@@ -25,3 +25,4 @@ equivalent of a more traditional actuarial workflow. The tests used so far rely 
 * functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
 * write tests for Berquist-Sherman functions
 * functions for claim emergence
+* figure out testing/continuous 
