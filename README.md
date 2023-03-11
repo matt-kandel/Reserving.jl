@@ -6,10 +6,12 @@ This is a library to do basic actuarial reserving based on the Casualty Actuaria
 material. I wanted to write code could scale beyond the 4x4 or 5x5 toy examples that are designed to
 be solved under exam conditions.
 
-Reserving methods included so far:
-* Chainladder (included in tests)
-* Bornhuetter-Ferguson (not tested yet)
-* Cape Cod (not tested yet)
+Reserving methods included and tested:
+* Chainladder
+* Bornhuetter-Ferguson
+* Cape Cod
+
+Things that are included, but not yet teesteed
 * Berquist Sherman case adjustment (not tested yet)
 * Berquist Sherman disposal rate adjustment (not tested yet)
 
@@ -21,8 +23,8 @@ The only current dependency is Plots for the (still in-progress) heat mapping fu
 The test_data.xlsx file is an Excel spreadsheet of simulated data to show that this package can do the 
 equivalent of a more traditional actuarial workflow. The tests used so far rely on the same simulated data.
 
-### To do later
-* functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
-* write tests for Berquist-Sherman functions
-* functions for claim emergence
-* figure out testing/continuous integration stuff (tests are currently passing as of March 11, 2023)
+### To do
+* Test Berquist-Sherman adjustments
+* Write doc strings for all functions
+* Write functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
+* Write functions for claim emergence
