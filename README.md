@@ -1,6 +1,6 @@
 # Reserving.jl
 
-[![Build Status](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/matt-kandel/Reserving.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 This is a library to do basic actuarial reserving based on the Casualty Actuarial Society (CAS) Exam 5
 material. I wanted to write code could scale beyond the 4x4 or 5x5 toy examples that are designed to
