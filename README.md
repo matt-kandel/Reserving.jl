@@ -28,3 +28,7 @@ equivalent of a more traditional actuarial workflow. The tests used so far rely 
 * Write doc strings for all functions
 * Write functions for different weighted averages for LDFs and year-on-year changes (last three years, last five years, etc.)
 * Write functions for claim emergence
+
+### Larger questions I'll need help with:
+How to deal with multiple triangle. Can I use DataFrames.jl? Or maybe a 3 dimensional structure?
+Or maybe just give each triangle an ID_dict, that would contain all the metadata that we'd filter on?
