@@ -4,10 +4,12 @@ struct Triangle
     data::Matrix{Union{Number, Missing}}
 end
 
-function latest_diagonal(triangle::Triangle)
+function latest_diagonal(data)
     # Copied from https://github.com/JuliaActuary/ChainLadder.jl/blob/master/src/utils.jl
-    return [row[findlast(x -> !ismissing(x), row)] for row in eachrow(triangle.data)]
+    return [row[findlast(x -> !ismissing(x), row)] for row in eachrow(data)]
 end
+
+latest_diagonal(triangle::Triangle) = latest_diagonal(triangle.data)
 
 function LDFs(triangle::Triangle)
     # Returns a Triangle of Loss Development Factors
@@ -125,7 +127,7 @@ function berquist_sherman_adjust_paid(counts::Triangle,
     return paid .* adjusted_counts ./ counts
 end
 
-function berquist_sherman_case(case::Matrix{Union{Number, Missing}}, severity_trend)
+function berquist_sherman_case(case, severity_trend)
     """Takes in a triangle of case reserves, takes the latest diagonal, and applies severity trend backwards in time
     Returns the adjusted case reserves triangle
     """
