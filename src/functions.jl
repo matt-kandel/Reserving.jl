@@ -1,4 +1,4 @@
-using Plots, DataFrames
+using Plots
 
 # I would rather do: Triangle = Matrix{Union{Missing, Number}} but it doesn't work
 # for the same strange reason that the line below returns false
