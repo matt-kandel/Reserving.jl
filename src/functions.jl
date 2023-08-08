@@ -81,7 +81,9 @@ function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector
     return born_ferg_ultimates(triangle, on_level_earned_premiums, expected_claims_ratio)
 end
 
-function make_lower_right_missing(triangle::Triangle)
+ # Temporarily removed type annotation ::Triangle below
+ # because Matrix{Float64} is not a subtype of Matrix{Union{Float64, Missing}}
+function make_lower_right_missing(triangle)
     height, width = size(triangle)
     lower_right_missing_matrix = [x <= y ? 1 : missing for x ∈ 1:height, y ∈ width:-1:1]
     return triangle .* lower_right_missing_matrix

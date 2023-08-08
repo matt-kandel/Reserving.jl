@@ -93,11 +93,11 @@ fix_missings(data) = fix_missing.(data)
     @test latest_diagonal(test_triangle) == excel_latest_diagonal
 
     # testing the LDFs() and YOYs() functions
-    my_LDFs = LDFs(test_triangle).data
+    my_LDFs = LDFs(test_triangle)
     my_LDFs = fix_missings(my_LDFs)
     @test my_LDFs ≈ fix_missings(excel_LDFs) rtol = 1e-6
    
-    my_YOYs = YOYs(test_triangle).data
+    my_YOYs = YOYs(test_triangle)
     my_YOYs = fix_missings(my_YOYs)
     @test my_YOYs ≈ fix_missings(excel_YOYs) rtol = 1e-6
 
