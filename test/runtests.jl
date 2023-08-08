@@ -120,9 +120,9 @@ fix_missings(data) = fix_missing.(data)
 #    I don't know how to test a plotting function yet
 #    @test make_heatmap,
 
-#    @test berquist_sherman_adjust_disposal
+#    @test berquist_sherman_disposal
     
-#    @test berquist_sherman_adjust_paid
+#    @test berquist_sherman_paid
     
     my_berq_sherm_adj_case = berquist_sherman_case(excel_berq_sherm_unadj_case, .15)
     my_berq_sherm_adj_case = fix_missings(my_berq_sherm_adj_case)
