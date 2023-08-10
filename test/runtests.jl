@@ -16,6 +16,33 @@ test_triangle = [5354.59 5763.431 6320.691 6415.301 7462.344 10417.88 13804.126 
                  8224.016 9314.84 m m m m m m m m;
                  8413.701 m m m m m m m m m]
 
+test_triangle2 = [40.170 56.430	73.737	83.806	94.848	82.996	92.761	104.297	93.264	94.668	86.520	97.085	109.653	99.454	101.901	113.609	114.211	103.068	93.669	106.683;
+                  46.057 65.022	73.272	83.835	86.586	96.439	99.953	98.175	100.236	100.689	99.752	103.346	108.115	101.227	101.739	111.162	100.665	99.356	110.174	m;
+                  44.949 62.053	77.085	77.523	90.577	95.948	104.057	95.347	102.356	99.069	105.462	103.913	102.034	105.222	119.014	101.638	102.308	102.076	m m;
+                  47.137 72.135	90.499	88.111	92.212	101.041	101.479	88.597	94.775	105.252	115.801	106.375	105.859	109.957	104.325	110.813	115.344	m m m;
+                  44.022 71.110	75.508	98.261	92.713	93.625	101.817	109.443	104.304	99.326	110.939	114.743	111.409	125.341	106.428	116.608	m m m m;
+                  49.994 73.015	83.299	88.807	98.778	100.830	99.489	110.891	114.743	116.154	113.052	96.776	116.520	122.642	116.553	m m m m m;
+                  49.018 78.119	89.387	95.860	101.268	116.603	108.650	110.388	120.631	119.471	119.121	114.330	118.976	122.187 m m m m m m;	
+                  50.970 82.345	88.987	98.910	110.272	101.751	111.757	123.284	114.497	112.384	127.223	115.844	129.001 m m m m m m m;	
+                  52.020 75.822	86.609	104.040	104.353	107.295	117.322	105.195	118.281	123.811	127.510	131.632 m m m m m m m m;		
+                  57.692 80.326	92.004	112.229	119.813	121.774	115.622	118.731	118.022	128.848	127.745 m m m m m m m m m;		
+                  62.201 87.996	101.222	100.145	120.461	131.392	127.178	114.423	130.389	122.671 m m m m m m m m m m;			
+                  56.130 86.688	106.535	124.149	122.890	125.723	134.697	120.728	126.303 m m m m m m m m m m m;			
+                  57.647 95.268	109.049	111.357	122.226	120.730	121.460	129.074 m m m m m m m m m m m m;				
+                  59.025 92.052	108.371	126.289	131.198	146.148	135.972 m m m m m m m m m m m m m;				
+                  64.677 92.192	106.184	123.520	135.866	129.165 m m m m m m m m m m m m m m;					
+                  62.954 81.153	103.760	122.589	137.474 m m m m m m m m m m m m m m m;					
+                  67.755 98.780	122.413	132.443 m m m m m m m m m m m m m m m m;						
+                  75.814 99.926	118.991 m m m m m m m m m m m m m m m m m;						
+                  74.403 102.834 m m m m m m m m m m m m m m m m m m;								
+                  75.241 m m m m m m m m m m m m m m m m m m m]
+
+excel_three_year_LDFs = [1.13893737, 1.13893737, 1.007004632, 0.960009725,
+                         0.983633919, 0.997858125, 0.914414526, 1.067064309,
+                         1.114844008, 0.967775159, 1.047758766, 1.023559734,
+                         1.05886904, 0.950146687, 0.998797657, 1.017346656,
+                         1.086304759, 1.138991348, 1.233347913, 1.383387304]
+
 excel_latest_diagonal = [23584.374, 29545.357, 21674.816, 35612.669, 23136.069,
                          14407.979, 19204.899, 8511.343, 9314.840, 8413.701]
 
@@ -54,9 +81,7 @@ excel_CDFs = [4.488720, 4.275621, 3.840673, 3.500925, 3.134936, 2.210627,
 excel_column_averages = [1.049840, 1.113248, 1.097045, 1.116746, 1.418120, 
                          1.268969, 1.351698, 1.186364, 1.086343, 1.000000][end:-1:1]
 
-# For some reason, these need to be Floats, even though I
-# defined my functions on Vector{Number} type
-excel_premiums = [27510., 32285, 37395, 42300, 47040,
+excel_premiums = [27510, 32285, 37395, 42300, 47040,
                   52095, 57165, 62020, 67010, 72205]
 
 excel_born_ferg_ultimates = [23584.374, 31341.572, 27540.532, 48225.607, 41168.749,
@@ -84,9 +109,7 @@ excel_berq_sherm_adj_case = [4897.708 13903.655 17103.874 19019.943 18422.947 21
                              13028.000 m m m m m m m]
 
 # Because missing == missing evaluates to missing
-# this function replaces missing with zero
-fix_missing(x::Union{Number, Missing}) = ismissing(x) ? 0 : x
-fix_missings(data) = fix_missing.(data)
+change_missing_to_zero(x::Union{Int64, Float64, Missing}) = ismissing(x) ? 0 : x
 
 @testset "Reserving.jl" begin
     
@@ -94,12 +117,12 @@ fix_missings(data) = fix_missing.(data)
 
     # testing the LDFs() and YOYs() functions
     my_LDFs = LDFs(test_triangle)
-    my_LDFs = fix_missings(my_LDFs)
-    @test my_LDFs ≈ fix_missings(excel_LDFs) rtol = 1e-6
+    my_LDFs = change_missing_to_zero.(my_LDFs)
+    @test my_LDFs ≈ change_missing_to_zero.(excel_LDFs) rtol = 1e-6
    
     my_YOYs = YOYs(test_triangle)
-    my_YOYs = fix_missings(my_YOYs)
-    @test my_YOYs ≈ fix_missings(excel_YOYs) rtol = 1e-6
+    my_YOYs = change_missing_to_zero.(my_YOYs)
+    @test my_YOYs ≈ change_missing_to_zero.(excel_YOYs) rtol = 1e-6
 
     @test CDFs(test_triangle) ≈ excel_CDFs rtol = 1e-6
 
@@ -117,16 +140,15 @@ fix_missings(data) = fix_missing.(data)
     # For this example, I'll say that my (made up) Premiums are On Level Premiums
     @test cape_cod_ultimates(test_triangle, excel_premiums) ≈ excel_cape_cod_ultimates rtol = 1e-6
  
-#    I don't know how to test a plotting function yet
-#    @test make_heatmap,
+    @test latest_three_year_LDFs(test_triangle2) ≈ excel_three_year_LDFs rtol = 1e-5
 
 #    @test berquist_sherman_disposal
     
 #    @test berquist_sherman_paid
     
-    my_berq_sherm_adj_case = berquist_sherman_case(excel_berq_sherm_unadj_case, .15)
-    my_berq_sherm_adj_case = fix_missings(my_berq_sherm_adj_case)
+#    my_berq_sherm_adj_case = berquist_sherman_case(excel_berq_sherm_unadj_case, .15)
+#    my_berq_sherm_adj_case = change_missing_to_zero.(my_berq_sherm_adj_case)
 
-#    @test my_berq_sherm_adj_case ≈ fix_missings(excel_berq_sherm_adj_case) rtol = 1e-3
+#    @test my_berq_sherm_adj_case ≈ change_missing_to_zero.(excel_berq_sherm_adj_case) rtol = 1e-3
            
 end

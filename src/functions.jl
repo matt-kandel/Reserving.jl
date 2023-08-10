@@ -1,8 +1,7 @@
 using Plots
 
-# I would rather do: Triangle = Matrix{Union{Missing, Number}} but it doesn't work
-# for the same strange reason that the line below returns false
-# Matrix{Union{Missing, Float64}} <: Matrix{Union{Missing, Number}}
+# Below line doesn't work, see https://m3g.github.io/JuliaNotes.jl/stable/typevariance/
+# Triangle = Matrix{Union{<:Number, Missing}}
 Triangle = Union{Matrix{Union{Int64, Missing}}, Matrix{Union{Float64, Missing}}}
 
 function latest_diagonal(triangle::Triangle)
@@ -16,7 +15,7 @@ function LDFs(triangle::Triangle)
     return triangle[:, 2:end] ./ triangle[:, 1:end-1]
 end
 
-function get_latest_three_year_LDFs(triangle::Triangle)
+function latest_three_year_LDFs(triangle::Triangle)
 
     # Create first, second, and third LDFs, where you have <3 data points
     third = sum(triangle[1:2, end-1:end-1]) / sum(triangle[1:2, end-2:end-2])
@@ -47,7 +46,7 @@ function column_averages(triangle::Triangle)
     return [col_sum(col) ./ col_count(col) for col in eachcol(triangle)]
 end
 
-function CDFs(triangle::Triangle, tail_factor::Number=1.0)
+function CDFs(triangle::Triangle, tail_factor::Float64=1.0)
     ldfs = LDFs(triangle)
     average_ldfs = column_averages(ldfs)
     
@@ -59,13 +58,13 @@ function CDFs(triangle::Triangle, tail_factor::Number=1.0)
     return cdfs
 end
 
-function chainladder_ultimates(triangle::Triangle, tail_factor::Number=1.0)
+function chainladder_ultimates(triangle::Triangle, tail_factor::Float64=1.0)
     cdfs  = CDFs(triangle, tail_factor)
     diagonal = latest_diagonal(triangle)
     return diagonal .* cdfs
 end
 
-function born_ferg_ultimates(triangle::Triangle, premiums::Vector{Float64},
+function born_ferg_ultimates(triangle::Triangle, premiums::Vector{<:Number},
                              expected_claims_ratio::Number, tail_factor::Number=1.0)
 
     cdfs  = CDFs(triangle, tail_factor)
@@ -73,7 +72,7 @@ function born_ferg_ultimates(triangle::Triangle, premiums::Vector{Float64},
     return diagonal + premiums .* expected_claims_ratio .* (1 .- 1 ./ cdfs)
 end
 
-function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{Float64})
+function cape_cod_ultimates(triangle::Triangle, on_level_earned_premiums::Vector{<:Number})
     cdfs = CDFs(triangle)
     diagonal = latest_diagonal(triangle)
     used_up_premium = on_level_earned_premiums ./ cdfs
@@ -117,7 +116,7 @@ function make_heatmap(triangle::Triangle)
                          legend=false, xticks=false, yticks=false, border=:none)
 end
 
-function berquist_sherman_disposal(counts::Triangle, ultimates::Vector{Float64})
+function berquist_sherman_disposal(counts::Triangle, ultimates::Vector{<:Number})
 
     # the disposal diagonal needs to be in reverse order
     disposal_diagonal = (latest_diagonal(counts) ./ ultimates)[end:-1:1]
@@ -126,8 +125,8 @@ function berquist_sherman_disposal(counts::Triangle, ultimates::Vector{Float64})
     return make_lower_right_missing(adjusted_counts)
 end
 
-function berquist_sherman_paid(counts::Triangle, paid::Triangle,
-                               ultimates::Vector{Float64})
+function berquist_sherman_paid(counts::Triangle, paid::Triangle, 
+                               ultimates::Vector{<:Number})
 
     adjusted_counts = berquist_sherman_disposal(counts, ultimates)
     return paid .* adjusted_counts ./ counts
