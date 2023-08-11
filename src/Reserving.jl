@@ -1,8 +1,5 @@
 module Reserving
 
-# Reserving.jl structs
-export Triangle
-
 # Reserving.jl functions
 export latest_diagonal, LDFs, latest_three_year_LDFs, YOYs, CDFs,
        column_averages, chainladder_ultimates, make_lower_right_missing,
