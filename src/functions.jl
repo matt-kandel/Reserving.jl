@@ -5,11 +5,8 @@ function latest_diagonal(◤::AbstractArray)
     return [row[findlast(x -> !ismissing(x), row)] for row in eachrow(◤)]
 end
 
-function LDFs(◤::AbstractArray)
-    # Returns a AbstractArray of Loss Development Factors
-    # with one less column than original data
-    return ◤[:, 2:end] ./ ◤[:, 1:end-1]
-end
+"""LDFs will have one less column than the triangle you put in"""
+LDFs(◤::AbstractArray) = ◤[:, 2:end] ./ ◤[:, 1:end-1]
 
 function latest_three_year_LDFs(◤::AbstractArray)
 
@@ -18,7 +15,7 @@ function latest_three_year_LDFs(◤::AbstractArray)
     second = ◤[1, end] / ◤[1, end-1]
     first = second
 
-    three_year_sum = ◤[1:end-2, :] .+ ◤[2:end-1, :] .+ ◤[3:end, :]
+    three_year_sum = ◤[1:end-2, :] + ◤[2:end-1, :] + ◤[3:end, :]
     three_year_LDFs = LDFs(three_year_sum)
 
     # Remove last row (all missing values)
@@ -30,11 +27,8 @@ function latest_three_year_LDFs(◤::AbstractArray)
 
 end
 
-function YOYs(◤::AbstractArray)
-    # Returns a AbstractArray of Year-on-Year Changes 
-    # with one less row than original data 
-    return ◤[2:end, :] ./ ◤[1:end-1, :]
-end
+"""YOYs will have one less row than the triangle you put in"""
+YOYs(◤::AbstractArray) = ◤[2:end, :] ./ ◤[1:end-1, :]
 
 function column_averages(◤::AbstractArray)
     col_sum(col) = sum(x for x in col if !ismissing(x))
@@ -58,9 +52,7 @@ function chainladder_ultimates(◤::AbstractArray, tail_factor::Float64)
     return latest_diagonal(◤) .* CDFs(◤, tail_factor)
 end
 
-function chainladder_ultimates(◤::AbstractArray)
-    return latest_diagonal(◤) .* CDFs(◤) 
-end
+chainladder_ultimates(◤::AbstractArray) = latest_diagonal(◤) .* CDFs(◤)
 
 function three_year_chainladder_ultimates(◤::AbstractArray)
     ldfs = latest_three_year_LDFs(◤)
