@@ -59,8 +59,8 @@ end
 
 function make_lower_right_missing(◤::Triangle)
     m, n = size(◤)
-    lower_right_missing_matrix = [x <= y ? 1 : missing for x ∈ 1:m, y ∈ n:-1:1]
-    return lower_right_missing_matrix .* ◤
+    mask = (1:m) .+ (1:n)' .> n + 1
+    return ifelse.(mask, missing, ◤)
 end
 
 function berquist_sherman_disposal(counts::Triangle, ultimates::Vector{<:Number})
