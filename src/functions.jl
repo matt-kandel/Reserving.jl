@@ -1,5 +1,5 @@
 using Statistics
-Triangle = AbstractArray
+Triangle = AbstractMatrix
 
 latest_diagonal(◤::Triangle) = last.(collect.(skipmissing.(eachrow(◤))))
 
