@@ -1,7 +1,7 @@
 using Statistics
 Triangle = AbstractMatrix
 
-latest_diagonal(◤::Triangle) = last.(collect.(skipmissing.(eachrow(◤))))
+latest_diagonal(◤::Triangle) = eachrow(◤) .|> skipmissing .|> collect .|> last
 
 """Year-on-Year changes will have one less row than the triangle you put in"""
 YOYs(◤::Triangle) = ◤[2:end, :] ./ ◤[1:end-1, :]
@@ -25,7 +25,7 @@ function latest_three_year_LDFs(◤::Triangle)
     return vcat(first, second, third, latest_three_year_LDFs)
 end
 
-column_averages(◤::Triangle) = mean.(collect.(skipmissing.(eachcol(◤))))
+column_averages(◤::Triangle) = eachcol(◤) .|> skipmissing .|> collect .|> mean
 
 function CDFs(◤::Triangle, tail_factor::Float64=1.0)
     average_ldfs = column_averages(LDFs(◤))
