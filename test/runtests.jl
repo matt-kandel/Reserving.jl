@@ -111,10 +111,7 @@ excel_berq_sherm_adj_case = [4897.708 13903.655 17103.874 19019.943 18422.947 21
 change_missing_to_zero(x) = ismissing(x) ? 0 : x
 
 @testset "Reserving.jl" begin
-    
     @test latest_diagonal(test_triangle) == excel_latest_diagonal
-
-    # testing the LDFs() and YOYs() functions
     my_LDFs = LDFs(test_triangle)
     my_LDFs = change_missing_to_zero.(my_LDFs)
     @test my_LDFs ≈ change_missing_to_zero.(excel_LDFs) rtol = 1e-6
@@ -132,20 +129,12 @@ change_missing_to_zero(x) = ismissing(x) ? 0 : x
     my_column_averages = reverse(my_column_averages)
     @test my_column_averages ≈ excel_column_averages rtol = 1e-6
     @test chainladder_ultimates(test_triangle) ≈ excel_chainladder_ultimates rtol = 1e-6
-    
-#    @test make_lower_right_missing
     @test born_ferg_ultimates(test_triangle, excel_premiums, .7) ≈ excel_born_ferg_ultimates rtol = 1e-6
 
     # For this example, I'll say that my (made up) premiums are already on-level
     @test cape_cod_ultimates(test_triangle, excel_premiums) ≈ excel_cape_cod_ultimates rtol = 1e-6
     @test latest_three_year_LDFs(test_triangle2) ≈ excel_three_year_LDFs rtol = 1e-5
-
-#    @test berquist_sherman_disposal    
-#    @test berquist_sherman_paid
-
-#    my_berq_sherm_adj_case = berquist_sherman_case(excel_berq_sherm_unadj_case, .15)
-#    my_berq_sherm_adj_case = change_missing_to_zero.(my_berq_sherm_adj_case)
-
-#    @test my_berq_sherm_adj_case ≈ change_missing_to_zero.(excel_berq_sherm_adj_case) rtol = 1e-3
-           
+    my_berq_sherm_adj_case = berquist_sherman_case(excel_berq_sherm_unadj_case, .15)
+    my_berq_sherm_adj_case = change_missing_to_zero.(my_berq_sherm_adj_case)
+    @test my_berq_sherm_adj_case ≈ change_missing_to_zero.(excel_berq_sherm_adj_case) rtol = 1e-6
 end

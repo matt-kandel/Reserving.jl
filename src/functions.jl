@@ -75,14 +75,15 @@ function berquist_sherman_paid(counts::Triangle, paid::Triangle, ultimates::Vect
 end
 
 """Takes in a ◤ of case reserves, takes the latest diagonal, and applies
-severity trend backwards in time. Returns a ◤ of adjusted case reserves."
+severity trend backwards in time. Returns a ◤ of adjusted case reserves.
 """
 function berquist_sherman_case(case::Triangle, severity_trend::Float64)
     m, n = size(case)
     if m != n
         error("Must use square matrices!")
     end
-    severity_trends = [(1 + severity_trend) ^ (m + 1 - (x + y)) for x ∈ 1:m, y ∈ 1:m]
-    adjusted_case = latest_diagonal(case) .* severity_trends
+    exponents = (1:m) .- (n:-1:1)'
+    severity_trends = (1 + severity_trend) .^ exponents
+    adjusted_case = severity_trends .* reverse(latest_diagonal(case))'
     return make_lower_right_missing(adjusted_case)
 end
