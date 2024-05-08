@@ -1,4 +1,3 @@
-using Statistics
 Triangle = AbstractMatrix
 
 latest_diagonal(◤::Triangle) = eachrow(◤) .|> skipmissing .|> collect .|> last
@@ -25,10 +24,21 @@ function latest_three_year_LDFs(◤::Triangle)
     return vcat(first, second, third, latest_three_year_LDFs)
 end
 
-column_averages(◤::Triangle) = eachcol(◤) .|> skipmissing .|> collect .|> mean
+# For the heat mapping function
+function μ(x)
+    x = x |> skipmissing |> collect
+    return sum(x) / length(x)
+end
+
+function sample_variance(x)
+    x = x |> skipmissing |> collect    
+    return (sum((x .- μ(x)) .^ 2) / (length(x) - 1))
+end
+sample_standard_deviation(x) = x |> sample_variance |> sqrt 
+Z_score_normalize(x) = (x .- μ(x)) / sample_standard_deviation(x)
 
 function CDFs(◤::Triangle, tail_factor::Float64=1.0)
-    average_ldfs = column_averages(LDFs(◤))
+    average_ldfs = ◤ |> LDFs |> eachcol .|> μ
     push!(average_ldfs, tail_factor)
     cdfs = cumprod(reverse(average_ldfs))
     return cdfs

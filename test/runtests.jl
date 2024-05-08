@@ -77,9 +77,6 @@ excel_YOYs = [1.287411 1.315848 1.310871 1.324148 1.387219 1.296998 1.339873 1.3
 excel_CDFs = reverse([4.488720, 4.275621, 3.840673, 3.500925, 3.134936, 2.210627,
               1.742066, 1.288798, 1.086343, 1.000000])
 
-excel_column_averages = reverse([1.049840, 1.113248, 1.097045, 1.116746, 1.418120, 
-                         1.268969, 1.351698, 1.186364, 1.086343, 1.000000])
-
 excel_premiums = [27510, 32285, 37395, 42300, 47040,
                   52095, 57165, 62020, 67010, 72205]
 
@@ -121,13 +118,6 @@ change_missing_to_zero(x) = ismissing(x) ? 0 : x
     @test my_YOYs ≈ change_missing_to_zero.(excel_YOYs) rtol = 1e-6
 
     @test CDFs(test_triangle) ≈ excel_CDFs rtol = 1e-6
-
-    # column_averages are average Loss Development Factors
-    # need to add 1.0 entry at the end and reverse to align with Excel results
-    my_column_averages = column_averages(excel_LDFs)
-    push!(my_column_averages, 1.0)
-    my_column_averages = reverse(my_column_averages)
-    @test my_column_averages ≈ excel_column_averages rtol = 1e-6
     @test chainladder_ultimates(test_triangle) ≈ excel_chainladder_ultimates rtol = 1e-6
     @test born_ferg_ultimates(test_triangle, excel_premiums, .7) ≈ excel_born_ferg_ultimates rtol = 1e-6
 
